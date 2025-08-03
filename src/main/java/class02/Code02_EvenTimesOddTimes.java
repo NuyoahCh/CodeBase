@@ -60,6 +60,12 @@ public class Code02_EvenTimesOddTimes {
 
 
     public static void main(String[] args) {
+
+        int test = 7;
+        int test2 = (~test) + 1;
+        System.out.println(test);
+        System.out.println(test2);
+
         int a = 5;
         int b = 7;
 
