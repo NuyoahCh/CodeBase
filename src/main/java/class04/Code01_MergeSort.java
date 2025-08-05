@@ -44,6 +44,7 @@ public class Code01_MergeSort {
         }
     }
 
+    // 非递归的方式实现
     public static void mergeSort2(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
