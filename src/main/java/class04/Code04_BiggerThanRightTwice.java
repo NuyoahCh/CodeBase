@@ -6,6 +6,7 @@ package class04;
  */
 public class Code04_BiggerThanRightTwice {
 
+    // 翻转对
     public static int reversePairs(int[] arr) {
         if (arr == null || arr.length < 2) {
             return 0;
