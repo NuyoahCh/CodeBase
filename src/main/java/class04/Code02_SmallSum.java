@@ -4,73 +4,56 @@ package class04;
  * @author wangchen
  * @version 1.0
  */
-public class Code01_MergeSort {
+public class Code02_SmallSum {
 
-    // 递归方法进行实现
-    public static void mergeSort1(int[] arr) {
+    public static int smallSum(int[] arr) {
         if (arr == null || arr.length < 2) {
-            return;
+            return 0;
         }
-        process(arr, 0, arr.length - 1);
+        return process(arr, 0, arr.length - 1);
     }
 
-    // arr[L..R] 排有序
-    public static void process(int[] arr, int L, int R) {
-        if (L == R) {
-            return;
+    public static int process(int[] arr, int l, int r) {
+        if (l == r) {
+            return 0;
         }
-        int mid = L + ((R - L) >> 1);
-        process(arr, L, mid);
-        process(arr, mid + 1, R);
-        merge(arr, L, mid, R);
+        int mid = l + ((r - l) >> 1);
+        return process(arr, l, mid) + process(arr, mid + 1, r) + merge(arr, l, mid, r);
     }
 
-    public static void merge(int[] arr, int L, int M, int R) {
-        int[] help = new int[R - L + 1];
+    public static int merge(int[] arr, int L, int m, int r) {
+        int[] help = new int[r - L + 1];
         int i = 0;
         int p1 = L;
-        int p2 = M + 1;
-        while (p1 <= M && p2 <= R) {
-            help[i++] = arr[p1] <= arr[p2] ? arr[p1++] : arr[p2++];
+        int p2 = m + 1;
+        int res = 0;
+        while (p1 <= m && p2 <= r) {
+            res += arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
         }
-        while (p1 <= M) {
+        while (p1 <= m) {
             help[i++] = arr[p1++];
         }
-        while (p2 <= R) {
+        while (p2 <= r) {
             help[i++] = arr[p2++];
         }
         for (i = 0; i < help.length; i++) {
             arr[L + i] = help[i];
         }
+        return res;
     }
 
-    // 非递归的方式实现
-    public static void mergeSort2(int[] arr) {
+    // for test
+    public static int comparator(int[] arr) {
         if (arr == null || arr.length < 2) {
-            return;
+            return 0;
         }
-        int N = arr.length;
-        // 步长
-        int mergeSize = 1;
-        while (mergeSize < N) {
-            // 每一次每一个左组的第一个位置
-            int L = 0;
-            while (L < N) {
-                if (mergeSize >= N - L) {
-                    break;
-                }
-                int M = L + mergeSize - 1;
-                int R = Math.min(mergeSize, N - M - 1);
-                merge(arr, L, M, R);
-                L = R + 1;
+        int res = 0;
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = 0; j < i; j++) {
+                res += arr[j] < arr[i] ? arr[j] : 0;
             }
-            // 防止溢出现象
-            if (mergeSize > N / 2) {
-                break;
-            }
-            // 步长每次都进行乘 2 的操作
-            mergeSize <<= 1;
         }
+        return res;
     }
 
     // for test
@@ -129,21 +112,17 @@ public class Code01_MergeSort {
         int testTime = 500000;
         int maxSize = 100;
         int maxValue = 100;
-        System.out.println("测试开始");
+        boolean succeed = true;
         for (int i = 0; i < testTime; i++) {
             int[] arr1 = generateRandomArray(maxSize, maxValue);
             int[] arr2 = copyArray(arr1);
-            mergeSort1(arr1);
-            mergeSort2(arr2);
-            if (!isEqual(arr1, arr2)) {
-                System.out.println("出错了！");
+            if (smallSum(arr1) != comparator(arr2)) {
+                succeed = false;
                 printArray(arr1);
                 printArray(arr2);
                 break;
             }
         }
-        System.out.println("测试结束");
+        System.out.println(succeed ? "Nice!" : "Fucking fucked!");
     }
-
-
 }
